@@ -29,7 +29,8 @@
    Inteface Class for Franka gripper.
 
 """
-
+import sys
+import socket
 import rospy
 import actionlib
 import franka_dataflow

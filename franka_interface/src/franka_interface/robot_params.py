@@ -98,8 +98,11 @@ class RobotParams(object):
         try:
             robot_ip = rospy.get_param("/franka_control/robot_ip")
         except KeyError:
-            rospy.logerr("RobotParam: robot_ip cannot detect robot ip."
-                         " under param /robot_ip")
+            try:
+                robot_ip = rospy.get_param("/robot_config/robot_ip")
+            except KeyError:
+                rospy.logerr("RobotParam: robot_ip cannot detect robot ip."
+                             " under param /robot_ip")
         except (socket.error, socket.gaierror):
             _log_networking_error()
 
@@ -227,9 +230,9 @@ class RobotParams(object):
 if __name__ == '__main__':
     
     rp = RobotParams()
-    # print rp.__dict__
-    print rp.get_robot_ip()
-    print rp.get_robot_name()
-    print rp.get_joint_names()
+    # print(rp.__dict__)
+    print(rp.get_robot_ip())
+    print(rp.get_robot_name())
+    print(rp.get_joint_names())
 
 

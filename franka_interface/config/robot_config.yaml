@@ -12,6 +12,7 @@ robot_config:
       - panda_joint7
     arm_id: panda
         # Activate rate limiter? [true|false]
+    joint_limit_warning_threshold: 0.1 # [rad]
     rate_limiting: true
     # Cutoff frequency of the low-pass filter. Set to >= 1000 to deactivate.
     cutoff_frequency: 100
@@ -83,7 +84,19 @@ robot_config:
             panda_joint4: 87 # Nm
             panda_joint5: 12 # Nm
             panda_joint6: 12 # Nm
-            panda_joint7: 12 # Nm            
+            panda_joint7: 12 # Nm      
+
+    realtime_config: enforce
+    # Configure the initial defaults for the collision behavior reflexes.
+    collision_config:
+      lower_torque_thresholds_acceleration: [20.0, 20.0, 18.0, 18.0, 16.0, 14.0, 12.0]  # [Nm]
+      upper_torque_thresholds_acceleration: [20.0, 20.0, 18.0, 18.0, 16.0, 14.0, 12.0]  # [Nm]
+      lower_torque_thresholds_nominal: [20.0, 20.0, 18.0, 18.0, 16.0, 14.0, 12.0]  # [Nm]
+      upper_torque_thresholds_nominal: [20.0, 20.0, 18.0, 18.0, 16.0, 14.0, 12.0]  # [Nm]
+      lower_force_thresholds_acceleration: [20.0, 20.0, 20.0, 25.0, 25.0, 25.0]  # [N, N, N, Nm, Nm, Nm]
+      upper_force_thresholds_acceleration: [20.0, 20.0, 20.0, 25.0, 25.0, 25.0]  # [N, N, N, Nm, Nm, Nm]
+      lower_force_thresholds_nominal: [20.0, 20.0, 20.0, 25.0, 25.0, 25.0]  # [N, N, N, Nm, Nm, Nm]
+      upper_force_thresholds_nominal: [20.0, 20.0, 20.0, 25.0, 25.0, 25.0]  # [N, N, N, Nm, Nm, Nm]      
 
 gripper_config:
   joint_names:
@@ -95,12 +108,14 @@ gripper_config:
     outer: 0.005 # [m]
 
 controllers_config:
-    joint_position_controller: "franka_ros_interface/joint_position_controller"
-    joint_velocity_controller: "franka_ros_interface/joint_velocity_controller"
-    joint_torque_controller: "franka_ros_interface/joint_torque_controller"
+    position_controller: "franka_ros_interface/position_joint_position_controller"
+    torque_controller: "franka_ros_interface/effort_joint_torque_controller"
+    impedance_controller: "franka_ros_interface/effort_joint_impedane_controller"
+    velocity_controller: "franka_ros_interface/velocity_joint_velocity_controller"
+    force_controller: "franka_ros_interface/force_controller"
+    ntorque_controller: "franka_ros_interface/ntorque_controller"
     joint_impedance_controller: "franka_ros_interface/joint_impedance_controller"
     cartesian_impedance_controller: "franka_ros_interface/cartesian_impedance_controller"
-    cartesian_force_controller: "franka_ros_interface/cartesian_force_controller"
     trajectory_controller: "position_joint_trajectory_controller"
     default_controller: "position_joint_trajectory_controller" # for safety, always set a position controller as default
     command_timeout: 0.2 # timeout to wait for consecutive torque control commands (or velocity) when using torque (or velocity) control. If timeout is violated, the controller interface will automatically switch to default controller for safety
