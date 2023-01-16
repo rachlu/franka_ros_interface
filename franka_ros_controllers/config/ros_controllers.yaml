@@ -93,6 +93,7 @@ joint_impedance_controller:
 
 cartesian_pose_controller:
     type: franka_ros_controllers/CartesianPoseController
+    arm_id: panda
     joint_names:
         - panda_joint1
         - panda_joint2
@@ -104,6 +105,7 @@ cartesian_pose_controller:
 
 cartesian_velocity_controller:
     type: franka_ros_controllers/CartesianVelocityController
+    arm_id: panda
     joint_names:
         - panda_joint1
         - panda_joint2

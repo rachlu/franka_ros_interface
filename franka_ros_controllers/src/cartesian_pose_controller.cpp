@@ -113,7 +113,7 @@ void CartesianPoseController::update(const ros::Time& /* time */,
   cartesian_pose_handle_->setCommand(new_pose);*/
 
   // Take desired position, quaternion and create homogenous transform to send
-  //TODO there has a to be a better way
+  // Assume a better C++ programmer would have a better way to do this. 
   std::array<double, 16> new_pose;
   std::copy_n(position_d_.data(), 3, new_pose.begin()+12);
   /*new_pose[12] = position_d_[0];

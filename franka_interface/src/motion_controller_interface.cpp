@@ -47,6 +47,9 @@ void MotionControllerInterface::init(ros::NodeHandle& nh,
   if (!nh.getParam("/controllers_config/joint_impedance_controller", joint_impedance_controller_name_)) {
         joint_impedance_controller_name_ = "joint_impedance_controller";
     }
+  if (!nh.getParam("/controllers_config/cartesian_pose_controller", cartesian_pose_controller_name_)) {
+        cartesian_pose_controller_name_ = "cartesian_pose_controller";
+   }
   if (!nh.getParam("/controllers_config/cartesian_impedance_controller", cartesian_impedance_controller_name_)) {
         cartesian_impedance_controller_name_ = "cartesian_impedance_controller";
    }
@@ -67,6 +70,7 @@ void MotionControllerInterface::init(ros::NodeHandle& nh,
   all_controllers_.push_back(joint_velocity_controller_name_);
   all_controllers_.push_back(joint_torque_controller_name_);
   all_controllers_.push_back(joint_impedance_controller_name_);
+  all_controllers_.push_back(cartesian_pose_controller_name_);
   all_controllers_.push_back(cartesian_impedance_controller_name_);
   all_controllers_.push_back(cartesian_force_controller_name_);
   all_controllers_.push_back(trajectory_controller_name_);
@@ -84,6 +88,7 @@ void MotionControllerInterface::init(ros::NodeHandle& nh,
   controller_name_to_mode_map_[joint_torque_controller_name_] = franka_core_msgs::JointCommand::TORQUE_MODE;
   controller_name_to_mode_map_[joint_impedance_controller_name_] = franka_core_msgs::JointCommand::IMPEDANCE_MODE;
   controller_name_to_mode_map_[joint_velocity_controller_name_] = franka_core_msgs::JointCommand::VELOCITY_MODE;
+  controller_name_to_mode_map_[cartesian_pose_controller_name_] = -1; // Unsure
   controller_name_to_mode_map_[cartesian_force_controller_name_] = -1; // Unsure
   controller_name_to_mode_map_[cartesian_impedance_controller_name_] = -1; // Unsure about this?
   controller_name_to_mode_map_[trajectory_controller_name_] = -1;
@@ -154,7 +159,8 @@ bool MotionControllerInterface::switchToDefaultController() {
                             ", " << stop_controllers[2] <<
                             ", " << stop_controllers[3] <<
                             ", " << stop_controllers[4] <<
-                            ", " << stop_controllers[5] << " stopped.");
+			    ", " << stop_controllers[5] <<
+                            ", " << stop_controllers[6] << " stopped.");
   return true;
 }
 
@@ -179,6 +185,7 @@ bool MotionControllerInterface::switchControllers(int control_mode) {
         stop_controllers.push_back(joint_impedance_controller_name_);
         stop_controllers.push_back(joint_torque_controller_name_);
         stop_controllers.push_back(joint_velocity_controller_name_);
+	stop_controllers.push_back(cartesian_pose_controller_name_);
         stop_controllers.push_back(cartesian_impedance_controller_name_);
         stop_controllers.push_back(cartesian_force_controller_name_);
         stop_controllers.push_back(trajectory_controller_name_);
@@ -188,6 +195,7 @@ bool MotionControllerInterface::switchControllers(int control_mode) {
         stop_controllers.push_back(joint_position_controller_name_);
         stop_controllers.push_back(joint_torque_controller_name_);
         stop_controllers.push_back(joint_velocity_controller_name_);
+	stop_controllers.push_back(cartesian_pose_controller_name_);
         stop_controllers.push_back(cartesian_impedance_controller_name_);
         stop_controllers.push_back(cartesian_force_controller_name_);
         stop_controllers.push_back(trajectory_controller_name_);
@@ -197,6 +205,7 @@ bool MotionControllerInterface::switchControllers(int control_mode) {
         stop_controllers.push_back(joint_position_controller_name_);
         stop_controllers.push_back(joint_impedance_controller_name_);
         stop_controllers.push_back(joint_velocity_controller_name_);
+	stop_controllers.push_back(cartesian_pose_controller_name_);
         stop_controllers.push_back(cartesian_impedance_controller_name_);
         stop_controllers.push_back(cartesian_force_controller_name_);
         stop_controllers.push_back(trajectory_controller_name_);
@@ -206,6 +215,7 @@ bool MotionControllerInterface::switchControllers(int control_mode) {
         stop_controllers.push_back(joint_position_controller_name_);
         stop_controllers.push_back(joint_impedance_controller_name_);
         stop_controllers.push_back(joint_torque_controller_name_);
+	stop_controllers.push_back(cartesian_pose_controller_name_);
         stop_controllers.push_back(cartesian_impedance_controller_name_);
         stop_controllers.push_back(cartesian_force_controller_name_);
         stop_controllers.push_back(trajectory_controller_name_);
@@ -229,7 +239,8 @@ bool MotionControllerInterface::switchControllers(int control_mode) {
                             ", " << stop_controllers[2] <<
                             ", " << stop_controllers[3] <<
                             ", " << stop_controllers[4] <<
-                            ", " << stop_controllers[5] << " stopped.");
+			    ", " << stop_controllers[5] <<
+                            ", " << stop_controllers[6] << " stopped.");
   }
   return true;
 }

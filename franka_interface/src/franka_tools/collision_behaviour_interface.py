@@ -24,7 +24,7 @@
 # limitations under the License.
 # **************************************************************************/
 import rospy
-from franka_control.srv import SetForceTorqueCollisionBehavior, SetFullCollisionBehavior
+from franka_msgs.srv import SetForceTorqueCollisionBehavior, SetFullCollisionBehavior
 
 DEFAULT_VALUES =  {
             'torque_acc_lower'  : [20.0, 20.0, 18.0, 18.0, 16.0, 14.0, 12.0],
@@ -84,7 +84,7 @@ class CollisionBehaviourInterface(object):
 
             rospy.loginfo("CollisionBehaviourInterface: Collision behaviour change request: %s. \n\tDetails: %s"%("Success" if response.success else "Failed!", response.error))
 
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             rospy.logwarn("CollisionBehaviourInterface: Collision behaviour change service call failed: %s"%e)
             return False
 

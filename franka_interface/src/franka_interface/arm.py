@@ -569,7 +569,6 @@ class ArmInterface(object):
         """
         self._pub_joint_cmd_timeout.publish(Float64(timeout))
 
-    '''
     def set_joint_position_speed(self, speed=0.3):
         """
         Set ratio of max joint speed to use during joint position
@@ -589,6 +588,7 @@ class ArmInterface(object):
             rospy.logwarn("ArmInterface: Setting speed above 0.3 could be risky!! Be extremely careful.")
         self._speed_ratio = speed
 
+    '''
     def set_joint_positions(self, positions):
         """
         Commands the joints of this limb to the specified positions.
@@ -966,13 +966,10 @@ class ArmInterface(object):
         rospy.loginfo("ArmInterface: Trajectory controlling complete")
 
     def set_joint_velocity(self, v):
-        #TODO Need a better interface. Use action lib?
-
-        #Need q converted to list
         if self._ctrl_manager.current_controller != self._ctrl_manager.joint_velocity_controller: 
             self.switchToController(self._ctrl_manager.joint_velocity_controller)
 
-        return NotImplementedError
+        return NotImplementedError("Need to develop the interface for this")
 
     def set_joint_impedance_config(self, q, stiffness=None, vel=0.005):
         #Need q converted to list
@@ -998,7 +995,7 @@ class ArmInterface(object):
         if self._ctrl_manager.current_controller != self._ctrl_manager.joint_impedance_controller:
             self.switchToController(self._ctrl_manager.joint_impedance_controller)
 
-        for i in xrange(len(qs)):
+        for i in range(len(qs)):
             self.set_joint_impedance_config(qs[i], stiffness)
             if i == 0: self.resetErrors()
 
@@ -1033,13 +1030,10 @@ class ArmInterface(object):
             rospy.sleep(0.1)
 
     def set_cartesian_velocity(self, w):
-        #TODO Need a better interface. Use action lib?
-
-        #Need q converted to list
         if self._ctrl_manager.current_controller != self._ctrl_manager.cartesian_velocity_controller: 
             self.switchToController(self._ctrl_manager.cartesian_velocity_controller)
 
-        return NotImplementedError
+        return NotImplementedError("Need to develop the interface for this")
 
     def set_cartesian_impedance_pose(self, pose, stiffness=None):
         if self._ctrl_manager.current_controller != self._ctrl_manager.cartesian_impedance_controller: 
@@ -1074,8 +1068,8 @@ class ArmInterface(object):
         if self._ctrl_manager.current_controller != self._ctrl_manager.cartesian_impedance_controller: 
             self.switchToController(self._ctrl_manager.cartesian_impedance_controller)
 
-        for i in xrange(len(poses)):
-            self.set_cart_impedance_pose(poses[i], stiffness)
+        for i in range(len(poses)):
+            self.set_cartesian_impedance_pose(poses[i], stiffness)
             if i == 0: self.resetErrors()
 
     def set_cartesian_force(self, target_wrench):
