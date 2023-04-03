@@ -226,19 +226,20 @@ void CartesianImpedanceController::stiffnessParamCallback(
   cartesian_stiffness_target_.setIdentity();
   cartesian_damping_target_.setIdentity(); // Damping ratio = 1
   //nullspace_stiffness_target_ = config.nullspace_stiffness; TODO
-
+  
+  //Original dampling factor was 2
   cartesian_stiffness_target_(0,0) = msg.x;
   cartesian_stiffness_target_(1,1) = msg.y;
   cartesian_stiffness_target_(2,2) = msg.z;
   cartesian_stiffness_target_(3,3) = msg.xrot;
   cartesian_stiffness_target_(4,4) = msg.yrot;
   cartesian_stiffness_target_(5,5) = msg.zrot;
-  cartesian_damping_target_(0,0) = 2.0 * sqrt(msg.x);
-  cartesian_damping_target_(1,1) = 2.0 * sqrt(msg.y);
-  cartesian_damping_target_(2,2) = 2.0 * sqrt(msg.z);
-  cartesian_damping_target_(3,3) = 2.0 * sqrt(msg.xrot);
-  cartesian_damping_target_(4,4) = 2.0 * sqrt(msg.yrot);
-  cartesian_damping_target_(5,5) = 2.0 * sqrt(msg.zrot);
+  cartesian_damping_target_(0,0) = 0.5 * sqrt(msg.x);
+  cartesian_damping_target_(1,1) = 0.5 * sqrt(msg.y);
+  cartesian_damping_target_(2,2) = 0.5 * sqrt(msg.z);
+  cartesian_damping_target_(3,3) = 0.5 * sqrt(msg.xrot);
+  cartesian_damping_target_(4,4) = 0.5 * sqrt(msg.yrot);
+  cartesian_damping_target_(5,5) = 0.5 * sqrt(msg.zrot);
 }
 
 void CartesianImpedanceController::equilibriumPoseCallback(
