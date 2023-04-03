@@ -648,6 +648,12 @@ class ArmInterface(object):
         self._command_msg.header.stamp = rospy.Time.now()
         self._joint_command_publisher.publish(self._command_msg)
 
+    
+    def has_contact(self):
+        """
+        Returns true if either joint contact or cartesian contact is detected.
+        """
+        return any(self._joint_contact) or any(self._cartesian_contact)
 
     def has_collided(self):
         """
@@ -889,6 +895,12 @@ class ArmInterface(object):
             )
 
         rospy.sleep(0.5)
+        
+        if self.has_contact():
+            rospy.loginfo('Contact detected!')
+
+        if self.has_collided():
+            rospy.loginfo('Collision detected!')
 
         if not self.has_collided():
             rospy.logerr('Move To Touch did not end in making contact')
@@ -1033,6 +1045,20 @@ class ArmInterface(object):
         for i in range(len(poses)):
             self.set_cart_impedance_pose(poses[i], stiffness)
             if i == 0: self.resetErrors()
+
+    def execute_cart_impedance_traj_recover(self, poses, stiffness=None):
+        if self._ctrl_manager.current_controller != self._ctrl_manager.cartesian_impedance_controller:
+            self.switchToController(self._ctrl_manager.cartesian_impedance_controller)
+
+        for i in range(len(poses)):
+            self.set_cart_impedance_pose(poses[i], stiffness)
+            if i == 0: self.resetErrors()
+            
+            # Collision detected. Reset error and abandon trajectory
+            if self._robot_mode == 4:
+                rospy.loginfo('Collision Detected!')
+                self.resetErrors()
+                break
 
     def execute_joint_impedance_traj(self, qs, stiffness=None):
         if self._ctrl_manager.current_controller != self._ctrl_manager.joint_impedance_controller:
