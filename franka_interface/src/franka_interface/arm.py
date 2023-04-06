@@ -1046,19 +1046,20 @@ class ArmInterface(object):
             self.set_cart_impedance_pose(poses[i], stiffness)
             if i == 0: self.resetErrors()
 
-    def execute_cart_impedance_traj_recover(self, poses, stiffness=None):
-        if self._ctrl_manager.current_controller != self._ctrl_manager.cartesian_impedance_controller:
-            self.switchToController(self._ctrl_manager.cartesian_impedance_controller)
+    def execute_joint_impedance_traj_recover(self, qs, stiffness=None):
+        if self._ctrl_manager.current_controller != self._ctrl_manager.joint_impedance_controller:
+            self.switchToController(self._ctrl_manager.joint_impedance_controller)
 
-        for i in range(len(poses)):
-            self.set_cart_impedance_pose(poses[i], stiffness)
+        for i in range(len(qs)):
+            self.set_joint_impedance_config(qs[i], stiffness)
             if i == 0: self.resetErrors()
             
             # Collision detected. Reset error and abandon trajectory
             if self._robot_mode == 4:
                 rospy.loginfo('Collision Detected!')
                 self.resetErrors()
-                break
+                return False
+        return True
 
     def execute_joint_impedance_traj(self, qs, stiffness=None):
         if self._ctrl_manager.current_controller != self._ctrl_manager.joint_impedance_controller:
