@@ -1053,9 +1053,10 @@ class ArmInterface(object):
         for i in range(len(qs)):
             self.set_joint_impedance_config(qs[i], stiffness)
             if i == 0: self.resetErrors()
+
             
-            print(self.get_robot_status())
-            # Collision detected. Reset error and abandon trajectory
+            # print(self.get_robot_status())
+            # # Collision detected. Reset error and abandon trajectory
             # if self._robot_mode == 4:
             #     rospy.loginfo('Collision Detected!')
             #     self.resetErrors()
